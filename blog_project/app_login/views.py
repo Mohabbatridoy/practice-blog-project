@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, ListView, UpdateView, DetailView, DeleteView, View, TemplateView
-from .models import User
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from . import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import UserProfile
 
 # Create your views here.
 def SignUp(request):
@@ -41,7 +41,33 @@ def LogOut(request):
 
 
 
-class UserProfileDetails(LoginRequiredMixin, DetailView):
-    context_object_name = 'user'
-    model = User
-    template_name = 'Profile.html'
+@login_required
+def Profile(request):
+    return render(request, 'Profile.html', context={})
+
+@login_required
+def EditProfile(reqeust):
+    current_user = reqeust.user
+    form = forms.UserProfileEdit(instance=current_user)
+    if reqeust.method == 'POST':
+        form = forms.UserProfileEdit(reqeust.POST, instance=current_user)
+        if form.is_valid():
+            form.save()
+            form = forms.UserProfileEdit(instance=current_user)
+            return HttpResponseRedirect(reverse('app_login:profile'))
+
+    return render(reqeust, 'profile_edit.html', context={'form':form})
+
+@login_required
+def Passchange(request):
+    changed = False
+    current_user = request.user
+    form = PasswordChangeForm(current_user)
+    if request.method == 'POST':
+        form = PasswordChangeForm(current_user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            form = PasswordChangeForm(current_user)
+            changed=True
+    
+    return render(request, 'pass_edit.html', context={'form':form, 'changed':changed})
