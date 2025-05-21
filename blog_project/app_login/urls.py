@@ -9,5 +9,8 @@ urlpatterns = [
     path('log_out/', views.LogOut, name="log_out"),
     path('profile/', views.Profile, name="profile"),
     path('edit_prifle/', views.EditProfile, name="edit_profile"),
-    path('password/', views.Passchange, name="pass_edit")
+    path('password/', views.Passchange, name="pass_edit"),
+    path('profile_pic/', views.ProfilePic, name="profile_pic"),
+    path('chang-pro-pic/', views.changeProfilePic, name="pro_pic_change"),
+    path('delete-pro-pic/', views.delProPic, name="del_pro_pic")
 ]

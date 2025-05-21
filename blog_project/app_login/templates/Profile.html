@@ -2,6 +2,15 @@
 {% block title_block %} Profile {%endblock%}
 {% block content %}
 <h2>Your Profile: </h2>
+        {% if user.user_profile %}
+        <img src="/media/{{user.user_profile.profile_pic}}" alt="profile pic" class="rounded-circle" width="100px"> <br><br>
+        <a href="{% url 'app_login:pro_pic_change' %}" class="btn btn-primary btn-sm">Change profile pic</a>
+        <a href="{% url 'app_login:del_pro_pic' %}" class="btn btn-danger btn-sm">Delete Profile Pic</a>
+        {%else%}
+        <img src="/media/profile_pics/avatar.jpg" alt="avatar pic" class="rounded-circle" width="100px">
+        <br><br>
+        <a href="{% url 'app_login:profile_pic' %}" class="btn btn-primary btn-sm">Add Profile Pic</a>
+        {% endif %}
         <p>Username: {{user.username}}</p>
         <p>Email: {{user.email}}</p>
         <p>Name: {{user.first_name}} {{user.last_name}}</p>

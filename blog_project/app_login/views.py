@@ -71,3 +71,32 @@ def Passchange(request):
             changed=True
     
     return render(request, 'pass_edit.html', context={'form':form, 'changed':changed})
+
+@login_required
+def ProfilePic(request):
+    form = forms.ProfilePicForm()
+    if request.method == 'POST':
+        form = forms.ProfilePicForm(request.POST, request.FILES)
+        if form.is_valid():
+            user_obj = form.save(commit=False)
+            user_obj.user = request.user
+            user_obj.save()
+            return HttpResponseRedirect(reverse('app_login:profile'))
+    return render(request, 'profile_pic_form.html', context={'form':form})
+
+@login_required
+def changeProfilePic(request):
+    form = forms.ProfilePicForm(instance=request.user.user_profile)
+    if request.method=='POST':
+        form = forms.ProfilePicForm(request.POST, request.FILES, instance=request.user.user_profile)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('app_login:profile'))
+    return render(request, 'profile_pic_form.html', context={'form':form})
+
+@login_required
+def delProPic(request):
+    if request.user.user_profile:
+        post = request.user.user_profile
+        post.delete()
+        return HttpResponseRedirect(reverse('app_login:profile'))
