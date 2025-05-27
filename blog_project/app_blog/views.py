@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import CreateView, UpdateView, DetailView, DeleteView, TemplateView
+from django.views.generic import CreateView, UpdateView, DetailView, DeleteView, TemplateView,ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Blog, Comment, Like
 import uuid
@@ -7,8 +7,12 @@ from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse
 
 # Create your views here.
-def Blog_list(request):
-    return render(request, 'blog_list.html', context={})
+
+class Blog_list(LoginRequiredMixin, ListView):
+    context_object_name = 'blog'
+    model = Blog
+    template_name = 'blog_list.html'
+
 class CreateBlog(LoginRequiredMixin, CreateView):
     model = Blog
     fields = ('blog_title','blog_content','blog_image')

@@ -1,6 +1,20 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
+{% load custom_filters %}
 {% block title_block %} home page {% endblock %}
 {% block content %}
-    <h1>Hi there</h1>
+    {% for bl in blog %}
+        <h2>{{bl.blog_title}}</h2>
+        <h6><i>{{bl.publish_date}}</i></h6>
+        <div class="row">
+            <div class="col-sm-4">
+                <img src="/media/{{bl.blog_image}}" alt="{{bl.blog_title}}" title="{{bl.blog_title}}" width="100%">
+            </div>
+            <div class="col-sm-8">
+                <p>{{bl.blog_content|range_filter|linebreaks}}</p>
+                <h6><a href="#">@{{bl.author}}</a></h6>
+                <a href="">Read More</a>
+            </div>
+        </div>
+        <hr>
+    {% endfor %}
 {% endblock %}

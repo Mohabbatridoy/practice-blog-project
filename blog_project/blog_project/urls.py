@@ -9,6 +9,7 @@ urlpatterns = [
     path('', views.Index , name="index"),
     path('account/', include('app_login.urls')),
     path('blog/', include('app_blog.urls')),
+    
 ]
 
 
