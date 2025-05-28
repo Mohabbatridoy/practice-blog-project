@@ -31,18 +31,43 @@ class CreateBlog(LoginRequiredMixin, CreateView):
 @login_required
 def BlogDetails(request, slug):
     blog = Blog.objects.get(slug=slug)
+        
+    comment_form = CommentForm()
+    alredy_liked = Like.objects.filter(blog=blog, user=request.user)
+    if alredy_liked:
+        Liked = True
+    else:
+        Liked = False
 
-    form = CommentForm()
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
+    if request.method == "POST":
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
             comment.user = request.user
             comment.blog = blog
             comment.save()
-            return HttpResponseRedirect(reverse('app_blog:blog_detials',kwargs={'slug':slug}))
-        
+            return HttpResponseRedirect(reverse('app_blog:blog_details', kwargs={'slug':slug}))
 
-    return render(request, 'blog_details.html', context={'blog':blog, 'form':form})
+    return render(request, 'blog_details.html', context={'blog':blog, 'form':comment_form, 'liked':Liked})
+
+@login_required
+def Liked(request, pk):
+    blog = Blog.objects.get(pk=pk)
+    user = request.user
+
+    already_liked = Like.objects.filter(blog=blog,user=user)
+    if not already_liked:
+        liked = Like.objects.filter(blog=blog, user=user)
+        liked.save()
+    return HttpResponseRedirect(reverse('app_blog:blog_detials', kwargs={'slug':blog.slug}))
+
+@login_required
+def Unliked(reqeust, pk):
+    blog = Blog.objects.get(pk=pk)
+    user = reqeust.user
+    already_liked = Like.objects.filter(blog=blog, user=user)
+    if already_liked:
+        already_liked.delete()
+    return HttpResponseRedirect(reverse('app_blog:blog_detials', kwargs={'slug':blog.slug}))
 
 

@@ -14,16 +14,25 @@
         </div>
     </div>
     <p>{{blog.blog_content|linebreaks}}</p>
-    <hr>
+    {% if Liked %}
+    <a href="{% url 'app_blog:unlike_post' pk=blog.pk %}">
+        <i class="fa-solid fa-thumbs-up"></i>
+    </a>
+    
+    {% else %}
+    <a href="{% url 'app_blog:like_post' pk=blog.pk %}">
+        <i class="fa-regular fa-thumbs-up"></i>
+    </a>
+
+    {% endif %}
     <div class="row">
-        <div class="col-sm-4">
-            <h4>Comments:</h4>
+        <div class="col-sm-6">
+            <h4>Commnets:</h4>
             {% for comment in blog.blog_comment.all %}
             <p><a href="#">@{{comment.user}}:</a> {{comment.comment}} <br> <i>{{comment.comment_date}}</i></p>
-            <hr>
             {% endfor %}
         </div>
-        <div class="col-sm-8">
+        <div class="col-sm-6">
             <form method="POST">
                 {% csrf_token %}
                 {{form|crispy}}
