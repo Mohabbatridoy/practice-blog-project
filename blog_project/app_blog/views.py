@@ -57,9 +57,9 @@ def Liked(request, pk):
 
     already_liked = Like.objects.filter(blog=blog,user=user)
     if not already_liked:
-        liked = Like.objects.filter(blog=blog, user=user)
+        liked = Like(blog=blog, user=user)
         liked.save()
-    return HttpResponseRedirect(reverse('app_blog:blog_detials', kwargs={'slug':blog.slug}))
+    return HttpResponseRedirect(reverse('app_blog:blog_details', kwargs={'slug':blog.slug}))
 
 @login_required
 def Unliked(reqeust, pk):
@@ -68,6 +68,6 @@ def Unliked(reqeust, pk):
     already_liked = Like.objects.filter(blog=blog, user=user)
     if already_liked:
         already_liked.delete()
-    return HttpResponseRedirect(reverse('app_blog:blog_detials', kwargs={'slug':blog.slug}))
+    return HttpResponseRedirect(reverse('app_blog:blog_details', kwargs={'slug':blog.slug}))
 
 

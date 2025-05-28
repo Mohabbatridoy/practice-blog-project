@@ -8,17 +8,17 @@
             <h6><a href="">@{{blog.author}}</a></h6>
             <p><i>{{blog.publish_date}}</i></p>
             <p><i>{{blog.update_date}}</i></p>
+            <p>{{blog.blog_like.count}} Likes | {{blog.blog_comment.count}} Commnets</p>
         </div>
         <div class="col-sm-6">
             <img src="/media/{{blog.blog_image}}" alt="{{blog.blog_title}}" width="100%">
         </div>
     </div>
     <p>{{blog.blog_content|linebreaks}}</p>
-    {% if Liked %}
+    {% if liked %}
     <a href="{% url 'app_blog:unlike_post' pk=blog.pk %}">
         <i class="fa-solid fa-thumbs-up"></i>
     </a>
-    
     {% else %}
     <a href="{% url 'app_blog:like_post' pk=blog.pk %}">
         <i class="fa-regular fa-thumbs-up"></i>
