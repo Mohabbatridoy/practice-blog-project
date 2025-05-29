@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% block title_block %} Home Page {% endblock %}
+{% block content %}
+    {% for row in user.post_author.all %}
+        <h3>{{row.blog_title}}</h3>
+        <h6><i>{{row.publish_date}}</i></h6>
+        <div class="row">
+            <div class="col-sm-4">
+                <img src="/media/{{row.blog_image}}" width="100%">
+            </div>
+            <div class="col-sm-6">
+                {{row.blog_content|range_filter|linebreaks}}
+                <a href="{% url 'app_blog:blog_details' slug=row.slug %}">Read More</a>
+            </div>
+        </div>
+        <a href="{% url 'app_blog:edit_blog' pk=row.pk %} " class="btn btn-success btn-sm">Edit Blog</a>
+    {% endfor %}
+
+{% endblock %}

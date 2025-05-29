@@ -24,6 +24,9 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'app_blog:create_blog' %}">Upload Blog</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'app_blog:my_blog' %}">My Blog</a>
+        </li>
       </ul>
       <ul class="navbar-nav ms-auto" style="padding-right: 30px;">
         {% if user.is_authenticated %}

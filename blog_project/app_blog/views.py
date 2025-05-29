@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Blog, Comment, Like
 import uuid
 from django.shortcuts import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from .forms import CommentForm
 
 # Create your views here.
@@ -69,5 +69,19 @@ def Unliked(reqeust, pk):
     if already_liked:
         already_liked.delete()
     return HttpResponseRedirect(reverse('app_blog:blog_details', kwargs={'slug':blog.slug}))
+
+
+
+class MyBlogs(LoginRequiredMixin, TemplateView):
+    template_name = 'my_blogs.html'
+
+class UpdateBlog(LoginRequiredMixin, UpdateView):
+    context_object_name = 'blog'
+    model = Blog
+    fields = ('blog_title', 'blog_content', 'blog_image')
+    template_name = 'edit_blog.html'
+
+    def get_success_url(self):
+        return reverse_lazy('app_blog:blog_details', kwargs={'slug':self.object.slug})
 
 

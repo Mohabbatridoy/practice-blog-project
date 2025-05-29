@@ -9,4 +9,6 @@ urlpatterns = [
     path('details/<path:slug>/', views.BlogDetails, name="blog_details"),
     path('liked/<pk>/', views.Liked, name="like_post"),
     path('unliked/<pk>/', views.Unliked, name="unlike_post"),
+    path('my-blogs/', views.MyBlogs.as_view(), name="my_blog"),
+    path('edi-blog/<pk>/', views.UpdateBlog.as_view(), name="edit_blog")
 ]
